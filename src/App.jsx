@@ -106,11 +106,11 @@ function App() {
           </p>
 
           <p>
-            <strong>Worth:</strong> ₱{walletData.value_php}
+            <strong>Worth:</strong> ${walletData.value_usd}
           </p>
 
           <p>
-            <strong>Estimated Gas:</strong> ₱{walletData.gas_php}
+            <strong>Estimated Gas:</strong> ${walletData.gas_usd}
           </p>
 
           <p>
