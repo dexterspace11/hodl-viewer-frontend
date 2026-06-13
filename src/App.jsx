@@ -8,18 +8,32 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [scannerStarted, setScannerStarted] = useState(false);
 
+  // =========================
+  // FETCH WALLET DATA
+  // =========================
   const fetchWallet = async (walletAddress = address) => {
     if (!walletAddress) {
       alert("Please enter a wallet address");
       return;
     }
 
+    if (!walletAddress.startsWith("0x") || walletAddress.length !== 42) {
+      alert("Invalid Ethereum address");
+      return;
+    }
+
     try {
       setLoading(true);
+      setWalletData(null);
 
       const response = await axios.get(
-        `https://hodl-viewer-api.onrender.com/wallet/${address}`
+        `https://hodl-viewer-api.onrender.com/wallet/${walletAddress}`
       );
+
+      if (response.data.status === "failed") {
+        alert(response.data.error);
+        return;
+      }
 
       setWalletData(response.data);
 
@@ -30,6 +44,9 @@ function App() {
     }
   };
 
+  // =========================
+  // QR SCANNER
+  // =========================
   const startScanner = () => {
     if (scannerStarted) return;
 
@@ -50,8 +67,8 @@ function App() {
         scanner.clear();
         setScannerStarted(false);
       },
-      (errorMessage) => {
-        // Ignore scan errors
+      () => {
+        // ignore scan errors
       }
     );
 
@@ -73,11 +90,17 @@ function App() {
       />
 
       <div>
-        <button style={styles.button} onClick={() => fetchWallet()}>
+        <button
+          style={styles.button}
+          onClick={() => fetchWallet()}
+        >
           View Wallet
         </button>
 
-        <button style={styles.button} onClick={startScanner}>
+        <button
+          style={styles.button}
+          onClick={startScanner}
+        >
           Scan QR
         </button>
       </div>
@@ -123,6 +146,9 @@ function App() {
   );
 }
 
+// =========================
+// STYLES
+// =========================
 const styles = {
   container: {
     textAlign: "center",
