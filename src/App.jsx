@@ -18,7 +18,7 @@ function App() {
       setLoading(true);
 
       const response = await axios.get(
-        `https://hodl-viewer-api.onrender.com/wallet/`
+        `https://hodl-viewer-api.onrender.com/wallet/${address}`
       );
 
       setWalletData(response.data);
